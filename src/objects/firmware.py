@@ -6,17 +6,34 @@ from contextlib import suppress
 
 class Firmware(FileObject):
     '''
-    This objects represents a firmware
+    This class represents a firmware.
+    It esentially is a FileObject with some more attributes that only make
+    sense for firmware.
+    All constructor arguments are passed to the
+    :class:`~objects.file.FileObject` constructor
     '''
 
-    def __init__(self, binary=None, file_name=None, file_path=None, scheduled_analysis=None):
-        super().__init__(binary=binary, file_name=file_name, file_path=file_path, scheduled_analysis=scheduled_analysis)
-        self.device_name = None
-        self.version = None
-        self.device_class = None
-        self.vendor = None
-        self.part = ''
-        self.release_date = None
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        #: The name of the device that the firmware runs on
+        self.device_name: str = None
+        #: The version of the firmware in no specific format
+        self.version: str = None
+        #: The type of device that the firmware runs on.
+        #: E.g. "router"
+        self.device_class: str = None
+        self.vendor: str = None
+        #: The part of the firmware that is this object represents.
+        #: Specifies the parts of an embedded system that are contained in the firmware.
+        #: While this meta data string can be freely defined during firmware upload,
+        #: FACT provides a preset of frequently used values: 'complete', 'kernel', ' bootloader', and 'root-fs'.
+        #: The firmware image is assumed to be 'complete' if the assigned value is an empty string.
+        self.part: str = ''
+        # The release date of the firmware in the format "YYYY-MM-DD".
+        self.release_date: str = None
+        #: A dict where the keys represent tags and the values represent the
+        #: colors of the tags.
+        #: Possible values are defined in :class:`helperFunctions.tag.TagColor`.
         self.tags = dict()
         self._update_root_id_and_virtual_path()
 
