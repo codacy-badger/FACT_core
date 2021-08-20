@@ -8,8 +8,8 @@ from objects.file import FileObject
 class Firmware(FileObject):
     '''
     This class represents a firmware.
-    It esentially is a FileObject with some more attributes that only make
-    sense for firmware.
+    It essentially is a FileObject with some additional attributes that are
+    relevant only for firmware.
     All constructor arguments are passed to the
     :class:`~objects.file.FileObject` constructor
     '''
