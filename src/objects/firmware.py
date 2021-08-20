@@ -23,8 +23,9 @@ class Firmware(FileObject):
         #: The type of device that the firmware runs on.
         #: E.g. "router"
         self.device_class: str = None
+        #: The vendor of the firmware that this object represents.
         self.vendor: str = None
-        #: The part of the firmware that is this object represents.
+        #: The part of the firmware that this object represents.
         #: Specifies the parts of an embedded system that are contained in the firmware.
         #: While this meta data string can be freely defined during firmware upload,
         #: FACT provides a preset of frequently used values: 'complete', 'kernel', ' bootloader', and 'root-fs'.
@@ -39,12 +40,19 @@ class Firmware(FileObject):
         self._update_root_id_and_virtual_path()
 
     def set_part_name(self, part):
+        '''
+        Setter for `self.part_name`.
+        '''
         if part == 'complete':
             self.part = ''
         else:
             self.part = part
 
     def set_binary(self, binary):
+        '''
+        See :meth:`objects.file.FileObject.set_binary`.
+        Additionally `self` is set to be the root file of the fimware.
+        '''
         super().set_binary(binary)
         self._update_root_id_and_virtual_path()
         self.md5 = get_md5(binary)
@@ -53,10 +61,19 @@ class Firmware(FileObject):
         self.root_uid = self.uid
         self.virtual_file_path = {self.uid: [self.uid]}
 
-    def set_tag(self, tag, tag_color=TagColor.GRAY):
+    def set_tag(self, tag: str, tag_color=TagColor.GRAY):
+        '''
+        Set a tag with color.
+
+        :param tag: The tag name
+        :param tag_color: A tag color from :class:`~helperFunctions.tag.TagColor`
+        '''
         self.tags[tag] = tag_color
 
     def remove_tag(self, tag):
+        '''
+        Remove a tag.
+        '''
         with suppress(KeyError):
             self.tags.pop(tag)
 
